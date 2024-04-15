@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"
+    />
+    <title>Tic Tac Toe</title>
+  </head>
+  <body>
+    <h2>
+      Turno de
+      <br />
+      <strong>Player <span class="is-playing"></span></strong>
+    </h2>
+    <section>
+      <div class="space"></div>
+      <div class="space"></div>
+      <div class="space"></div>
+      <div class="space"></div>
+      <div class="space"></div>
+      <div class="space"></div>
+      <div class="space"></div>
+      <div class="space"></div>
+      <div class="space"></div>
+    </section>
+
+    <div class="click-to-restart">
+      <h4 class="has-won-banner">
+        <strong
+          >Player <span id="winer"></span> ha
+          <span class="status-game">ganado</span></strong
+        >
+        <p class="click-to-restart-text">Click to restart</p>
+      </h4>
+      <h4 class="table-banner">
+        <strong>Table</strong>
+
+        <p class="click-to-restart-text">Click to restart</p>
+      </h4>
+    </div>
+    <script>
+      let isPlayingPlayer = 1;
+      let finishedGame = false;
+      const $winer = document.querySelector("#winer");
+      const $section = document.querySelector("section");
+      const $isPlaying = document.querySelector(".is-playing");
+      const $clickToRestart = document.querySelector(".click-to-restart");
+      const $hasWonBanner = document.querySelector(".has-won-banner");
+      const $tableBanner = document.querySelector(".table-banner");
+      const spaces = [...document.querySelectorAll(".space")];
+
+      spaces.map((space, i) => {
+        space.addEventListener("click", () => {
+          if (finishedGame) {
+            return;
+          }
+
+          if (isPlayingPlayer === 1 && space.innerHTML === "") {
+            space.innerHTML = "X";
+            console.log(space.innerHTML, "aaaa");
+            isPlayingPlayer = 2;
+          }
+          if (isPlayingPlayer === 2 && space.innerHTML === "") {
+            space.innerHTML = "0";
+            isPlayingPlayer = 1;
+          }
+          console.log(isPlayingPlayer);
+          if (hasWon()) {
+            if (isPlayingPlayer === 1) {
+              isPlayingPlayer = 2;
+            } else {
+              isPlayingPlayer = 1;
+            }
+
+            finishedGame = true;
+            $winer.innerHTML = isPlayingPlayer;
+            $clickToRestart.style.opacity = 1;
+            $hasWonBanner.style.display = "flex";
+            $clickToRestart.style.pointerEvents = "all";
+          }
+
+          if (isTable() && !hasWon()) {
+            finishedGame = true;
+            $winer.innerHTML = isPlayingPlayer;
+            $clickToRestart.style.opacity = "1";
+            $clickToRestart.style.pointerEvents = "all";
+
+            $tableBanner.style.display = "flex";
+          } else {
+            $isPlaying.innerHTML = isPlayingPlayer;
+          }
+        });
+      });
+
+      $clickToRestart.addEventListener("click", resetGame);
+
+      function resetGame() {
+        isPlayingPlayer = 1;
+        finishedGame = false;
+        spaces.map((space, i) => {
+          space.innerHTML = "";
+        });
+        $clickToRestart.style.opacity = 0;
+        $clickToRestart.style.pointerEvents = "none";
+        $tableBanner.style.display = "none";
+        $hasWonBanner.style.display = "none";
+      }
+      function hasWon() {
+        const lines = [
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8],
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8],
+          [0, 4, 8],
+          [2, 4, 6],
+        ];
+
+        for (let i = 0; i < lines.length; i++) {
+          const [a, b, c] = lines[i];
+          if (
+            spaces[a].innerHTML !== "" &&
+            spaces[a].innerHTML === spaces[b].innerHTML &&
+            spaces[a].innerHTML === spaces[c].innerHTML
+          ) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      function isTable() {
+        let esTabla = true;
+        for (let i = 0; i < 9; i++) {
+          if (spaces[i].innerHTML == "") {
+            esTabla = false;
+            break;
+          }
+        }
+        return esTabla;
+      }
+    </script>
+  </body>
+
+  <style>
+    h2 {
+      width: 320px;
+      color: gray;
+    }
+    strong {
+      color: blanchedalmond;
+    }
+
+    .click-to-restart {
+      backdrop-filter: blur(3px);
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s;
+    }
+    .click-to-restart-text {
+      text-align: center;
+      color: thistle;
+    }
+
+    .table-banner {
+      display: none;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .has-won-banner {
+      display: none;
+      flex-direction: column;
+    }
+    html {
+      position: relative;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: rgb(48, 48, 48);
+    }
+    section {
+      width: 320px;
+      height: 300px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: start;
+    }
+
+    div {
+      border: 1px solid rgb(48, 48, 48);
+      background-color: rgba(177, 177, 177, 0.808);
+      font-size: 40px;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+  </style>
+</html>
