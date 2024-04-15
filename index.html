@@ -51,6 +51,7 @@
       const $hasWonBanner = document.querySelector(".has-won-banner");
       const $tableBanner = document.querySelector(".table-banner");
       const spaces = [...document.querySelectorAll(".space")];
+      $isPlaying.innerHTML = isPlayingPlayer;
 
       spaces.map((space, i) => {
         space.addEventListener("click", () => {
